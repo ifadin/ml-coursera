@@ -1,2 +1,6 @@
 # ml-coursera
-Machine Learning (Stanford University) @Coursera assignments
+
+Assignments for Machine Learning (Andrew Ng) @[Coursera](https://www.coursera.org/learn/machine-learning) course.
+
+
+ - week2 - Linear Regression

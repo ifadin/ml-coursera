@@ -1,3 +1,10 @@
+# Idea
+.idea
+.idea/
+
+# tokens
+**/token*.mat
+
 # History files
 .Rhistory
 .Rapp.history
