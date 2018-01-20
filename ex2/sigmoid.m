@@ -10,9 +10,19 @@ g = zeros(size(z));
 %               vector or scalar).
 
 
-
+g=1./(1+exp(-z));
 
 
 % =============================================================
 
 end
+
+%!assert (sigmoid(1200000), 1)
+%!assert (sigmoid(-25000), 0)
+%!assert (sigmoid(0), 0.5)
+
+%!shared tol
+%! tol = 5e-05
+%!assert (sigmoid([4 5 6]), [0.9820 0.9933 0.9975], tol)
+%!assert (sigmoid(magic(3)), [0.9997 0.7311 0.9975; 0.9526 0.9933 0.9991; 0.9820 0.9999 0.8808], tol)
+%!assert (sigmoid(eye(2)), [0.7311 0.5000; 0.5000 0.7311], tol)
