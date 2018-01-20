@@ -5,6 +5,9 @@
 # tokens
 **/token*.mat
 
+# pdfs
+**/*.pdf
+
 # History files
 .Rhistory
 .Rapp.history
