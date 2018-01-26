@@ -63,20 +63,22 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 
+a2 = sigmoid([ones(m, 1) X] * Theta1');
+a3 = sigmoid([ones(m, 1) a2] * Theta2');
 
+% yy= y (class) -> [0 1 0 0] as rows 
+yy=zeros(m,num_labels);
 
+for i=1:m
+  y_bool=zeros(num_labels, 1);
+  y_bool(y(i))=1;
+  yy(i,:)=y_bool';
+end
 
-
-
-
-
-
-
-
-
-
-
-
+J=-log(a3).*yy-log(1-a3).*(1-yy);
+theta1_reg=[zeros(hidden_layer_size,1) Theta1(:,2:end)].^2;
+theta2_reg=[zeros(num_labels,1) Theta2(:,2:end)].^2 ;
+J=(1/m)*sum(J(:))+(lambda/(2*m))*(sum(theta1_reg(:))+sum(theta2_reg(:)));
 
 
 
