@@ -63,11 +63,16 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 
-a2 = sigmoid([ones(m, 1) X] * Theta1');
-a3 = sigmoid([ones(m, 1) a2] * Theta2');
+% Feedforward: 
+a1 = [ones(m, 1) X];              % 5000x401
+z2 = a1 * Theta1';                % 5000x25
+a2 = [ones(m, 1) sigmoid(z2)];    % 5000x26
+z3 = a2 * Theta2';                % 5000x10
+a3 = sigmoid(z3);                 % 5000x10
 
-% yy= y (class) -> [0 1 0 0] as rows 
-yy=zeros(m,num_labels);
+
+%% transform y(i) into logical array -> [0 1 0 0] 
+yy=zeros(m,num_labels);           % 5000x10
 
 for i=1:m
   y_bool=zeros(num_labels, 1);
@@ -75,11 +80,26 @@ for i=1:m
   yy(i,:)=y_bool';
 end
 
+
+% Cost func:
+%% do not use Theta(:,1) columns (bias parameter) in regularization or backprop
+Theta1_no0=Theta1(:,2:end);      % 25x400
+Theta2_no0=Theta2(:,2:end);      % 10x25
+
 J=-log(a3).*yy-log(1-a3).*(1-yy);
-theta1_reg=[zeros(hidden_layer_size,1) Theta1(:,2:end)].^2;
-theta2_reg=[zeros(num_labels,1) Theta2(:,2:end)].^2 ;
+theta1_reg=[zeros(size(Theta1,1),1) Theta1_no0].^2;
+theta2_reg=[zeros(size(Theta2,1),1) Theta2_no0].^2 ;
 J=(1/m)*sum(J(:))+(lambda/(2*m))*(sum(theta1_reg(:))+sum(theta2_reg(:)));
 
+
+% Backprop:
+%% deltas
+delta3=a3-yy;                                   % 5000x10
+delta2=delta3*Theta2_no0.*sigmoidGradient(z2);  % 5000x25
+
+%% gradients by Theta
+Theta2_grad = (1/m)*(Theta2_grad + delta3'*a2) + (lambda/m)*[zeros(size(Theta2,1),1) Theta2_no0]; % 10x26
+Theta1_grad = (1/m)*(Theta1_grad + delta2'*a1) + (lambda/m)*[zeros(size(Theta1,1),1) Theta1_no0]; % 25x401
 
 
 % -------------------------------------------------------------
