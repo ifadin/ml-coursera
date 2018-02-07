@@ -27,10 +27,13 @@ centroids = zeros(K, n);
 %
 
 
+[c_freq, c_val] = hist(idx, unique(idx));
 
-
-
-
+for i = 1:size(c_val', 1)  
+  x = X(find(idx == c_val(i)), :);
+  mu = sum(x)'/c_freq(i);
+  centroids(c_val(i), :) = mu;
+end
 
 
 % =============================================================

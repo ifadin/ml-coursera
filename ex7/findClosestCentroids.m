@@ -22,9 +22,11 @@ idx = zeros(size(X,1), 1);
 %
 
 
-
-
-
+for i = 1:size(X,1)
+  diff = bsxfun(@minus, centroids, X(i,:));
+  [_, ind] = min(sum(abs(diff).^2,2));
+  idx(i) = ind;
+end
 
 
 % =============================================================
